@@ -8,18 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		A01E1D5629EC13F50008E519 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E1D5529EC13F50008E519 /* AppDelegate.swift */; };
-		A01E1D5829EC13F50008E519 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E1D5729EC13F50008E519 /* ViewController.swift */; };
 		A01E1D5A29EC13F60008E519 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A01E1D5929EC13F60008E519 /* Assets.xcassets */; };
-		A01E1D5D29EC13F60008E519 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A01E1D5B29EC13F60008E519 /* Main.storyboard */; };
+		A01E1D6529EC14A40008E519 /* StatusBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E1D6429EC14A40008E519 /* StatusBarController.swift */; };
+		A01E1D6A29EC1B5B0008E519 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E1D6929EC1B5B0008E519 /* main.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A01E1D5229EC13F50008E519 /* SimpleMenuBarApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleMenuBarApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A01E1D5529EC13F50008E519 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A01E1D5729EC13F50008E519 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A01E1D5929EC13F60008E519 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A01E1D5C29EC13F60008E519 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A01E1D5E29EC13F60008E519 /* SimpleMenuBarApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimpleMenuBarApp.entitlements; sourceTree = "<group>"; };
+		A01E1D6429EC14A40008E519 /* StatusBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarController.swift; sourceTree = "<group>"; };
+		A01E1D6929EC1B5B0008E519 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,10 +53,10 @@
 			isa = PBXGroup;
 			children = (
 				A01E1D5529EC13F50008E519 /* AppDelegate.swift */,
-				A01E1D5729EC13F50008E519 /* ViewController.swift */,
+				A01E1D6929EC1B5B0008E519 /* main.swift */,
 				A01E1D5929EC13F60008E519 /* Assets.xcassets */,
-				A01E1D5B29EC13F60008E519 /* Main.storyboard */,
 				A01E1D5E29EC13F60008E519 /* SimpleMenuBarApp.entitlements */,
+				A01E1D6429EC14A40008E519 /* StatusBarController.swift */,
 			);
 			path = SimpleMenuBarApp;
 			sourceTree = "<group>";
@@ -120,7 +120,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A01E1D5A29EC13F60008E519 /* Assets.xcassets in Resources */,
-				A01E1D5D29EC13F60008E519 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,23 +130,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A01E1D5829EC13F50008E519 /* ViewController.swift in Sources */,
+				A01E1D6529EC14A40008E519 /* StatusBarController.swift in Sources */,
+				A01E1D6A29EC1B5B0008E519 /* main.swift in Sources */,
 				A01E1D5629EC13F50008E519 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		A01E1D5B29EC13F60008E519 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A01E1D5C29EC13F60008E519 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		A01E1D5F29EC13F60008E519 /* Debug */ = {
@@ -273,8 +262,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SimpleMenuBarApp/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -298,8 +289,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SimpleMenuBarApp/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
