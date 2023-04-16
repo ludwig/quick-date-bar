@@ -19,7 +19,7 @@ class StatusBarController: NSObject {
     }
 
     private func setupMenu() {
-        let copyMenuItem = NSMenuItem(title: "Copy Evernote Journal Prefix", action: #selector(copyString), keyEquivalent: "")
+        let copyMenuItem = NSMenuItem(title: "Copy Today's Evernote Journal Prefix", action: #selector(copyString), keyEquivalent: "")
         copyMenuItem.target = self
         menu.addItem(copyMenuItem)
 
