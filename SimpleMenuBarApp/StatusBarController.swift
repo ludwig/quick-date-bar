@@ -24,22 +24,40 @@ class StatusBarController: NSObject {
         // https://stackoverflow.com/questions/49294949/disable-enable-nsmenu-item
         menu.autoenablesItems = false
 
-        let copyMenuItem = NSMenuItem(
-            title: "Copy Today's Evernote Journal Prefix",
-            action: #selector(copyDateString),
-            keyEquivalent: ""
-        )
-        copyMenuItem.target = self
-        menu.addItem(copyMenuItem)
-
         restorePasteboardMenuItem = NSMenuItem(
             title: "Restore Old Pasteboard",
             action: #selector(restoreOldPasteboardItem),
-            keyEquivalent: ""
+            keyEquivalent: "0"
         )
         restorePasteboardMenuItem?.target = self
         restorePasteboardMenuItem?.isEnabled = false
         menu.addItem(restorePasteboardMenuItem!)
+
+        menu.addItem(NSMenuItem.separator())
+
+        let copyJournalPrefixMenuItem = NSMenuItem(
+            title: "Copy today's journal prefix for Evernote",
+            action: #selector(copyJournalPrefix),
+            keyEquivalent: "1"
+        )
+        copyJournalPrefixMenuItem.target = self
+        menu.addItem(copyJournalPrefixMenuItem)
+
+        let copyDateMenuItem = NSMenuItem(
+            title: "Copy today's date as prefix",
+            action: #selector(copyDate),
+            keyEquivalent: "2"
+        )
+        copyDateMenuItem.target = self
+        menu.addItem(copyDateMenuItem)
+
+        let copyTimeMenuItem = NSMenuItem(
+            title: "Copy now as time prefix",
+            action: #selector(copyTime),
+            keyEquivalent: "3"
+        )
+        copyTimeMenuItem.target = self
+        menu.addItem(copyTimeMenuItem)
         
         menu.addItem(NSMenuItem.separator())
 
@@ -55,7 +73,7 @@ class StatusBarController: NSObject {
         statusItem.button?.image = NSImage(named: "calendarIcon")
     }
 
-    private func formattedDateString() -> String {
+    private func formattedJournalPrefix() -> String {
         let currentDate = Date()
         let dateFormatter = DateFormatter()
         // See http://www.unicode.org/reports/tr35/tr35-31/tr35-dates.html#Date_Format_Patterns
@@ -64,10 +82,35 @@ class StatusBarController: NSObject {
         return dateString
     }
 
-    @objc private func copyDateString() {
-        let dateString = formattedDateString()
-        
-        // Save the current pasteboard contents
+    @objc private func copyJournalPrefix() {
+        let prefix = formattedJournalPrefix()
+        saveCurrentPasteboardContents()
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(prefix, forType: .string)
+    }
+
+    @objc private func copyDate() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateString = formatter.string(from: Date())
+        saveCurrentPasteboardContents()
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(dateString, forType: .string)
+    }
+
+    @objc private func copyTime() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy_MM_dd__HH_mm_ss"
+        let timeString = formatter.string(from: Date())
+        saveCurrentPasteboardContents()
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(timeString, forType: .string)
+    }
+
+    private func saveCurrentPasteboardContents() {
         let pasteboard = NSPasteboard.general
         let oldPasteboardItems = pasteboard.pasteboardItems ?? []
         if let oldItem = oldPasteboardItems.first {
@@ -85,10 +128,6 @@ class StatusBarController: NSObject {
             self.oldPasteboardItem = nil
             restorePasteboardMenuItem?.isEnabled = false
         }
-
-        // Write the date string to the pasteboard
-        pasteboard.clearContents()
-        pasteboard.setString(dateString, forType: .string)
     }
 
     @objc func restoreOldPasteboardItem() {
