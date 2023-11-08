@@ -58,6 +58,14 @@ class StatusBarController: NSObject {
         )
         copyTimeMenuItem.target = self
         menu.addItem(copyTimeMenuItem)
+
+        let copyWeekMenuItem = NSMenuItem(
+            title: "Copy today's week prefix",
+            action: #selector(copyYearWeek),
+            keyEquivalent: "4"
+        )
+        copyWeekMenuItem.target = self
+        menu.addItem(copyWeekMenuItem)
         
         menu.addItem(NSMenuItem.separator())
 
@@ -108,6 +116,16 @@ class StatusBarController: NSObject {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.setString(timeString, forType: .string)
+    }
+
+    @objc private func copyYearWeek() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-'W'ww"
+        let yearWeekString = formatter.string(from: Date())
+        saveCurrentPasteboardContents()
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(yearWeekString, forType: .string)
     }
 
     private func saveCurrentPasteboardContents() {
