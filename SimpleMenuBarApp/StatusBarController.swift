@@ -63,17 +63,17 @@ class StatusBarController: NSObject {
         let copyISO8601DateMenuItem = NSMenuItem(
             title: "Copy now in ISO8601 format",
             action: #selector(copyISO8601Date),
-            keyEquivalent: "i"
+            keyEquivalent: "4"
         )
-        copyISO8601DateMenuItem.keyEquivalentModifierMask = [.command]
         copyISO8601DateMenuItem.target = self
         menu.addItem(copyISO8601DateMenuItem)
 
         copyYearWeekMenuItem = NSMenuItem(
             title: "Copy today's week prefix",
             action: #selector(copyYearWeek),
-            keyEquivalent: "4"
+            keyEquivalent: "w"
         )
+        copyYearWeekMenuItem?.keyEquivalentModifierMask = [.command]
         copyYearWeekMenuItem?.target = self
         menu.addItem(copyYearWeekMenuItem!)
 
