@@ -19,13 +19,13 @@ class StatusBarController: NSObject, NSMenuDelegate {
     private var dateFormat = "yyyy-MM-dd"
     private var dateTitle: String {
         let date = formattedDate(with: dateFormat)
-        return "Copy today's date as prefix (\(date))"
+        return "Copy today's date (\(date))"
     }
 
     private var yearWeekFormat = "yyyy-'W'ww"
     private var yearWeekTitle: String {
         let yearWeek = formattedDate(with: yearWeekFormat)
-        return "Copy today's week prefix (\(yearWeek))"
+        return "Copy current week (\(yearWeek))"
     }
 
     override init() {
@@ -51,37 +51,29 @@ class StatusBarController: NSObject, NSMenuDelegate {
 
         menu.addItem(NSMenuItem.separator())
 
-        let copyJournalPrefixMenuItem = NSMenuItem(
-            title: "Copy today's journal prefix for Evernote",
-            action: #selector(copyJournalPrefix),
-            keyEquivalent: "1"
-        )
-        copyJournalPrefixMenuItem.target = self
-        menu.addItem(copyJournalPrefixMenuItem)
-
         copyDateMenuItem = NSMenuItem(
             title: dateTitle,
             action: #selector(copyDate),
-            keyEquivalent: "2"
+            keyEquivalent: "1"
         )
         copyDateMenuItem?.target = self
         menu.addItem(copyDateMenuItem!)
 
+        let copyISO8601DateMenuItem = NSMenuItem(
+            title: "Copy now in ISO8601 format",
+            action: #selector(copyISO8601Date),
+            keyEquivalent: "2"
+        )
+        copyISO8601DateMenuItem.target = self
+        menu.addItem(copyISO8601DateMenuItem)
+
         let copyTimeMenuItem = NSMenuItem(
-            title: "Copy now as time filename suffix",
+            title: "Copy now as filename string",
             action: #selector(copyTime),
             keyEquivalent: "3"
         )
         copyTimeMenuItem.target = self
         menu.addItem(copyTimeMenuItem)
-
-        let copyISO8601DateMenuItem = NSMenuItem(
-            title: "Copy now in ISO8601 format",
-            action: #selector(copyISO8601Date),
-            keyEquivalent: "4"
-        )
-        copyISO8601DateMenuItem.target = self
-        menu.addItem(copyISO8601DateMenuItem)
 
         copyYearWeekMenuItem = NSMenuItem(
             title: yearWeekTitle,
@@ -90,6 +82,14 @@ class StatusBarController: NSObject, NSMenuDelegate {
         )
         copyYearWeekMenuItem?.target = self
         menu.addItem(copyYearWeekMenuItem!)
+
+        let copyJournalPrefixMenuItem = NSMenuItem(
+            title: "Copy Evernote journal prefix",
+            action: #selector(copyJournalPrefix),
+            keyEquivalent: "e"
+        )
+        copyJournalPrefixMenuItem.target = self
+        menu.addItem(copyJournalPrefixMenuItem)
 
         let copyHugoFrontMatterMenuItem = NSMenuItem(
             title: "Copy Hugo front matter template",
@@ -145,13 +145,13 @@ class StatusBarController: NSObject, NSMenuDelegate {
         return dateString
     }
 
-    @objc private func copyJournalPrefix() {
-        let prefix = formattedJournalPrefix()
-        copyToClipboard(prefix)
-    }
-
     @objc private func copyDate() {
         let dateString = formattedDate(with: dateFormat)
+        copyToClipboard(dateString)
+    }
+
+    @objc private func copyISO8601Date() {
+        let dateString = formattedISO8601Date()
         copyToClipboard(dateString)
     }
 
@@ -162,14 +162,14 @@ class StatusBarController: NSObject, NSMenuDelegate {
         copyToClipboard(timeString)
     }
 
-    @objc private func copyISO8601Date() {
-        let dateString = formattedISO8601Date()
-        copyToClipboard(dateString)
-    }
-
     @objc private func copyYearWeek() {
         let yearWeekString = formattedDate(with: yearWeekFormat)
         copyToClipboard(yearWeekString)
+    }
+
+    @objc private func copyJournalPrefix() {
+        let prefix = formattedJournalPrefix()
+        copyToClipboard(prefix)
     }
 
     @objc private func copyHugoFrontMatterTemplate() {
