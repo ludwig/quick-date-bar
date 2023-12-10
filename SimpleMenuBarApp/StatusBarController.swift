@@ -13,6 +13,7 @@ class StatusBarController: NSObject {
     private let menu = NSMenu()
     private var restorePasteboardMenuItem: NSMenuItem?
     private var oldPasteboardItem: NSPasteboardItem?
+    private var copyYearWeekMenuItem: NSMenuItem?
 
     override init() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -59,13 +60,13 @@ class StatusBarController: NSObject {
         copyTimeMenuItem.target = self
         menu.addItem(copyTimeMenuItem)
 
-        let copyWeekMenuItem = NSMenuItem(
+        copyYearWeekMenuItem = NSMenuItem(
             title: "Copy today's week prefix",
             action: #selector(copyYearWeek),
             keyEquivalent: "4"
         )
-        copyWeekMenuItem.target = self
-        menu.addItem(copyWeekMenuItem)
+        copyYearWeekMenuItem?.target = self
+        menu.addItem(copyYearWeekMenuItem!)
         
         menu.addItem(NSMenuItem.separator())
 
@@ -79,6 +80,20 @@ class StatusBarController: NSObject {
 
         statusItem.menu = menu
         statusItem.button?.image = NSImage(named: "calendarIcon")
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateMenu),
+            name: NSMenu.willSendActionNotification,
+            object: nil
+        )
+    }
+
+    @objc private func updateMenu() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "ww"
+        let weekNumberString = formatter.string(from: Date())
+        copyYearWeekMenuItem?.title = "Copy today's week prefix (W\(weekNumberString))"
     }
 
     private func formattedJournalPrefix() -> String {
