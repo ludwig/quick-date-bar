@@ -60,6 +60,15 @@ class StatusBarController: NSObject {
         copyTimeMenuItem.target = self
         menu.addItem(copyTimeMenuItem)
 
+        let copyISO8601DateMenuItem = NSMenuItem(
+            title: "Copy now in ISO8601 format",
+            action: #selector(copyISO8601Date),
+            keyEquivalent: "i"
+        )
+        copyISO8601DateMenuItem.keyEquivalentModifierMask = [.command]
+        copyISO8601DateMenuItem.target = self
+        menu.addItem(copyISO8601DateMenuItem)
+
         copyYearWeekMenuItem = NSMenuItem(
             title: "Copy today's week prefix",
             action: #selector(copyYearWeek),
@@ -67,7 +76,7 @@ class StatusBarController: NSObject {
         )
         copyYearWeekMenuItem?.target = self
         menu.addItem(copyYearWeekMenuItem!)
-        
+
         menu.addItem(NSMenuItem.separator())
 
         let quitMenuItem = NSMenuItem(
@@ -141,6 +150,15 @@ class StatusBarController: NSObject {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.setString(yearWeekString, forType: .string)
+    }
+
+    @objc private func copyISO8601Date() {
+        let formatter = ISO8601DateFormatter()
+        let dateString = formatter.string(from: Date())
+        saveCurrentPasteboardContents()
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(dateString, forType: .string)
     }
 
     private func saveCurrentPasteboardContents() {
