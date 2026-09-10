@@ -91,10 +91,11 @@ class StatusBarController: NSObject, NSMenuDelegate {
         statusItem.menu = menu
         // SF Symbols are template images, so the icon tints correctly in light
         // and dark menu bars and renders crisply at every scale.
-        statusItem.button?.image = NSImage(
-            systemSymbolName: "calendar",
-            accessibilityDescription: "Quick Date"
-        )
+        if let image = NSImage(systemSymbolName: "calendar", accessibilityDescription: "Quick Date") {
+            statusItem.button?.image = image
+        } else {
+            statusItem.button?.title = "Date"
+        }
 
         NotificationCenter.default.addObserver(
             self,
@@ -179,9 +180,14 @@ class StatusBarController: NSObject, NSMenuDelegate {
     @objc private func toggleLaunchAtLogin() {
         let service = SMAppService.mainApp
         do {
-            if service.status == .enabled {
+            switch service.status {
+            case .enabled:
                 try service.unregister()
-            } else {
+            case .requiresApproval:
+                // Registered but blocked by the user; only System Settings
+                // can clear that.
+                SMAppService.openSystemSettingsLoginItems()
+            default:
                 try service.register()
             }
         } catch {

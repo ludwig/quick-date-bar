@@ -34,6 +34,9 @@ enum DateFormats {
             return cached
         }
         let formatter = DateFormatter()
+        // Fixed locale so digits and separators stay ASCII regardless of the
+        // system locale; these strings feed filenames, front matter, and logs.
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.calendar = calendar
         formatter.dateFormat = pattern
         formatters[pattern] = formatter

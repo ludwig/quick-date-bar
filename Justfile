@@ -15,7 +15,7 @@ build-if-needed:
     #!/usr/bin/env bash
     set -euo pipefail
     binary="{{release_app}}/Contents/MacOS/{{app_name}}"
-    if [ -f "$binary" ] && [ -z "$(find "{{project_root}}/{{app_name}}" "{{project_root}}/{{app_name}}.xcodeproj" -newer "$binary" -print -quit)" ]; then
+    if [ -f "$binary" ] && [ -z "$(find "{{project_root}}/{{app_name}}" "{{project_root}}/{{app_name}}.xcodeproj" "{{project_root}}/build.sh" -newer "$binary" -print -quit)" ]; then
         echo "{{app_name}}.app is up to date"
     else
         just --justfile "{{justfile()}}" build
@@ -23,7 +23,12 @@ build-if-needed:
 
 # Build if needed, then restart the app from the build directory.
 run: build-if-needed
-    -pkill -x "{{app_name}}"
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if pgrep -xq "{{app_name}}"; then
+        pkill -x "{{app_name}}"
+        sleep 1
+    fi
     open "{{release_app}}"
 
 # Build if needed, ad-hoc sign, replace /Applications/SimpleMenuBarApp.app, and relaunch it.

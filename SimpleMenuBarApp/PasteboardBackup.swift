@@ -19,7 +19,11 @@ final class PasteboardBackup {
     /// Since macOS 15.4 a programmatic read of the general pasteboard shows a
     /// "paste from other apps" alert unless the user chose Always Allow in
     /// System Settings. `.default` means the app has never triggered the alert;
-    /// the first read shows it once and flips the state to `.ask`.
+    /// the first read shows it once and flips the state to `.ask`. That one
+    /// alert is deliberate: an app only appears in the Paste from Other Apps
+    /// settings pane after it has triggered the alert. Under `.ask` every read
+    /// would prompt again, so the snapshot is skipped until the user picks
+    /// Always Allow.
     static var isReadAllowed: Bool {
         guard #available(macOS 15.4, *) else { return true }
         switch NSPasteboard.general.accessBehavior {

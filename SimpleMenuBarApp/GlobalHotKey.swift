@@ -53,10 +53,9 @@ final class GlobalHotKey {
             0,
             &hotKeyRef
         )
-        guard registered == noErr else {
-            RemoveEventHandler(handlerRef)
-            return nil
-        }
+        // deinit still runs when a failable init returns nil after all stored
+        // properties are set, so it handles removing the event handler.
+        guard registered == noErr else { return nil }
     }
 
     deinit {
