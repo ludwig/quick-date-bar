@@ -62,6 +62,7 @@ just build     # Release build into build/DerivedData
 just run       # build if needed, then launch from the build directory
 just install   # build if needed, ad-hoc sign, replace /Applications copy, relaunch
 just test      # boundary-date checks for the formatters
+just icon      # regenerate the app icon PNGs from scripts/make-icon.swift
 just clean
 ```
 
@@ -75,3 +76,4 @@ just clean
 - `SimpleMenuBarApp/PasteboardBackup.swift`: copy with snapshot, restore, privacy check.
 - `SimpleMenuBarApp/GlobalHotKey.swift`: Carbon `RegisterEventHotKey` wrapper.
 - `Tests/DateFormatsTests.swift`: run by `just test` with plain `swiftc`.
+- `scripts/make-icon.swift`: draws the app icon (calendar SF Symbol on a blue tile); `just icon` writes all sizes into the asset catalog.

@@ -52,5 +52,19 @@ test:
     swiftc -O -o build/date-formats-tests {{app_name}}/DateFormats.swift Tests/DateFormatsTests.swift
     build/date-formats-tests
 
+# Regenerate the app icon PNGs in AppIcon.appiconset from scripts/make-icon.swift.
+icon:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p build
+    swiftc -O -o build/make-icon scripts/make-icon.swift
+    build/make-icon build/icon-1024.png
+    dest="{{app_name}}/Assets.xcassets/AppIcon.appiconset"
+    for spec in "16 1 16" "16 2 32" "32 1 32" "32 2 64" "128 1 128" "128 2 256" "256 1 256" "256 2 512" "512 1 512" "512 2 1024"; do
+        set -- $spec
+        sips -z "$3" "$3" build/icon-1024.png --out "$dest/icon_${1}x${1}@${2}x.png" >/dev/null
+    done
+    echo "wrote $dest"
+
 clean:
     rm -rf build
