@@ -66,5 +66,34 @@ icon:
     done
     echo "wrote $dest"
 
+# Cut a release: bump the version, commit, tag, build, zip, push, and publish a GitHub release.
+release version:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    version="{{version}}"
+    tag="v$version"
+    [[ "$version" =~ ^[0-9]+(\.[0-9]+)+$ ]] || { echo "version must look like 1.0 or 1.2.3, got '$version'"; exit 1; }
+    [ "$(git branch --show-current)" = "main" ] || { echo "release must run from main (on $(git branch --show-current))"; exit 1; }
+    [ -z "$(git status --porcelain)" ] || { echo "working tree is not clean"; git status --short; exit 1; }
+    git fetch --quiet --tags origin
+    if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then echo "tag $tag already exists"; exit 1; fi
+    just --justfile "{{justfile()}}" test
+    pbxproj="{{project_root}}/{{app_name}}.xcodeproj/project.pbxproj"
+    build_number="$(grep -m1 'CURRENT_PROJECT_VERSION = ' "$pbxproj" | sed -E 's/.*= ([0-9]+);/\1/')"
+    next_build=$((build_number + 1))
+    sed -i '' -E "s/MARKETING_VERSION = [^;]+;/MARKETING_VERSION = $version;/; s/CURRENT_PROJECT_VERSION = [0-9]+;/CURRENT_PROJECT_VERSION = $next_build;/" "$pbxproj"
+    git add "$pbxproj"
+    git commit -q -m "chore: release $version"
+    git tag -a "$tag" -m "Release $version"
+    just --justfile "{{justfile()}}" build
+    codesign --force --sign - "{{release_app}}"
+    zip="{{project_root}}/build/{{app_name}}-$version.zip"
+    rm -f "$zip"
+    ditto -c -k --keepParent "{{release_app}}" "$zip"
+    git push origin main "$tag"
+    notes="The app is ad-hoc signed. After unzipping, right-click SimpleMenuBarApp.app and choose Open the first time (or allow it under System Settings › Privacy & Security), since Gatekeeper blocks double-clicking unsigned downloads."
+    gh release create "$tag" "$zip" --title "$version" --notes "$notes" --generate-notes
+    echo "released $tag with $(basename "$zip")"
+
 clean:
     rm -rf build

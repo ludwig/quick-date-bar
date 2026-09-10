@@ -63,6 +63,7 @@ just run       # build if needed, then launch from the build directory
 just install   # build if needed, ad-hoc sign, replace /Applications copy, relaunch
 just test      # boundary-date checks for the formatters
 just icon      # regenerate the app icon PNGs from scripts/make-icon.swift
+just release 1.0  # bump MARKETING_VERSION, commit, tag v1.0, build, zip, push, publish a GitHub release
 just clean
 ```
 
