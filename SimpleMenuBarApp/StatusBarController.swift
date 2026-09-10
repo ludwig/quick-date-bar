@@ -89,6 +89,7 @@ class StatusBarController: NSObject, NSMenuDelegate {
         let now = Date()
 
         restoreItem.isEnabled = pasteboard.hasBackup
+        restoreItem.toolTip = PasteboardBackup.isReadAllowed ? nil : PasteboardBackup.accessHint
         menu.addItem(restoreItem)
         menu.addItem(.separator())
 

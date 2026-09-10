@@ -14,8 +14,35 @@ final class PasteboardBackup {
         savedItem != nil
     }
 
+    /// Whether reading the general pasteboard is allowed without an alert.
+    ///
+    /// Since macOS 15.4 a programmatic read of the general pasteboard shows a
+    /// "paste from other apps" alert unless the user chose Always Allow in
+    /// System Settings. `.default` means the app has never triggered the alert;
+    /// the first read shows it once and flips the state to `.ask`.
+    static var isReadAllowed: Bool {
+        guard #available(macOS 15.4, *) else { return true }
+        switch NSPasteboard.general.accessBehavior {
+        case .default, .alwaysAllow:
+            return true
+        case .ask, .alwaysDeny:
+            return false
+        @unknown default:
+            return false
+        }
+    }
+
+    /// Where the user can grant access when `isReadAllowed` is false.
+    static let accessHint =
+        "Restore is unavailable until SimpleMenuBarApp is allowed under "
+        + "System Settings › Privacy & Security › Paste from Other Apps."
+
     func copy(_ string: String) {
-        save()
+        if Self.isReadAllowed {
+            save()
+        } else {
+            savedItem = nil
+        }
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.setString(string, forType: .string)
