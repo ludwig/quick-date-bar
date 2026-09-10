@@ -5,6 +5,7 @@
 //  Created by Luis Armendariz on 4/16/23.
 //
 
+import Carbon.HIToolbox
 import Cocoa
 import ServiceManagement
 
@@ -57,6 +58,7 @@ class StatusBarController: NSObject, NSMenuDelegate {
     private let pasteboard = PasteboardBackup()
     private let restoreItem: NSMenuItem
     private var entries: [CopyEntry] = []
+    private var dateHotKey: GlobalHotKey?
 
     override init() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -84,6 +86,17 @@ class StatusBarController: NSObject, NSMenuDelegate {
             name: .NSSystemTimeZoneDidChange,
             object: nil
         )
+
+        // ⌃⌥⌘D copies today's date from any app.
+        dateHotKey = GlobalHotKey(
+            keyCode: kVK_ANSI_D,
+            modifiers: controlKey | optionKey | cmdKey
+        ) { [weak self] in
+            self?.copy(.todaysDate)
+        }
+        if dateHotKey == nil {
+            NSLog("Could not register the ⌃⌥⌘D global hotkey")
+        }
     }
 
     // MARK: - Menu

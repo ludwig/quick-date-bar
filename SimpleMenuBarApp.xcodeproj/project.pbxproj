@@ -13,6 +13,7 @@
 		A01E1D6A29EC1B5B0008E519 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E1D6929EC1B5B0008E519 /* main.swift */; };
 		A01E1D7129EC14A40008E519 /* DateFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E1D7029EC14A40008E519 /* DateFormats.swift */; };
 		A01E1D7329EC14A40008E519 /* PasteboardBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E1D7229EC14A40008E519 /* PasteboardBackup.swift */; };
+		A01E1D7529EC14A40008E519 /* GlobalHotKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01E1D7429EC14A40008E519 /* GlobalHotKey.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		A01E1D6929EC1B5B0008E519 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		A01E1D7029EC14A40008E519 /* DateFormats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormats.swift; sourceTree = "<group>"; };
 		A01E1D7229EC14A40008E519 /* PasteboardBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardBackup.swift; sourceTree = "<group>"; };
+		A01E1D7429EC14A40008E519 /* GlobalHotKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotKey.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				A01E1D6429EC14A40008E519 /* StatusBarController.swift */,
 				A01E1D7029EC14A40008E519 /* DateFormats.swift */,
 				A01E1D7229EC14A40008E519 /* PasteboardBackup.swift */,
+				A01E1D7429EC14A40008E519 /* GlobalHotKey.swift */,
 			);
 			path = SimpleMenuBarApp;
 			sourceTree = "<group>";
@@ -139,6 +142,7 @@
 				A01E1D6529EC14A40008E519 /* StatusBarController.swift in Sources */,
 				A01E1D7129EC14A40008E519 /* DateFormats.swift in Sources */,
 				A01E1D7329EC14A40008E519 /* PasteboardBackup.swift in Sources */,
+				A01E1D7529EC14A40008E519 /* GlobalHotKey.swift in Sources */,
 				A01E1D6A29EC1B5B0008E519 /* main.swift in Sources */,
 				A01E1D5629EC13F50008E519 /* AppDelegate.swift in Sources */,
 			);
