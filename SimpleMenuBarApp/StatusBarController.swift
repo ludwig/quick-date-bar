@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import ServiceManagement
 
 /// One copyable menu item: how to title it and what to put on the pasteboard.
 struct CopyEntry {
@@ -111,6 +112,15 @@ class StatusBarController: NSObject, NSMenuDelegate {
         }
 
         menu.addItem(.separator())
+        let loginItem = NSMenuItem(
+            title: "Launch at Login",
+            action: #selector(toggleLaunchAtLogin),
+            keyEquivalent: ""
+        )
+        loginItem.target = self
+        loginItem.state = SMAppService.mainApp.status == .enabled ? .on : .off
+        menu.addItem(loginItem)
+
         let quitItem = NSMenuItem(title: "Quit", action: #selector(quitApp), keyEquivalent: "q")
         quitItem.target = self
         menu.addItem(quitItem)
@@ -129,6 +139,19 @@ class StatusBarController: NSObject, NSMenuDelegate {
 
     @objc private func restoreOldPasteboardItem() {
         pasteboard.restore()
+    }
+
+    @objc private func toggleLaunchAtLogin() {
+        let service = SMAppService.mainApp
+        do {
+            if service.status == .enabled {
+                try service.unregister()
+            } else {
+                try service.register()
+            }
+        } catch {
+            NSLog("Launch at Login change failed: %@", error.localizedDescription)
+        }
     }
 
     @objc private func timeZoneDidChange() {
