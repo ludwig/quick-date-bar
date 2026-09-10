@@ -1,1 +1,4 @@
 /build
+xcuserdata/
+.DS_Store
+.omc/
