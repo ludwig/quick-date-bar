@@ -22,7 +22,9 @@ class StatusBarController: NSObject, NSMenuDelegate {
         return "Copy today's date (\(date))"
     }
 
-    private var yearWeekFormat = "yyyy-'W'ww"
+    // Week-based year (YYYY) plus ISO calendar so Sundays and the days
+    // around New Year get the ISO 8601 week, e.g. 2025-12-29 -> 2026-W01.
+    private var yearWeekFormat = "YYYY-'W'ww"
     private var yearWeekTitle: String {
         let yearWeek = formattedDate(with: yearWeekFormat)
         return "Copy current week (\(yearWeek))"
@@ -120,6 +122,7 @@ class StatusBarController: NSObject, NSMenuDelegate {
 
     private func formattedDate(with format: String) -> String {
         let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .iso8601)
         formatter.dateFormat = format
         return formatter.string(from: Date())
     }
