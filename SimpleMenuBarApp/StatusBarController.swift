@@ -70,7 +70,12 @@ class StatusBarController: NSObject, NSMenuDelegate {
         menu.delegate = self
         menu.autoenablesItems = false
         statusItem.menu = menu
-        statusItem.button?.image = NSImage(named: "calendarIcon")
+        // SF Symbols are template images, so the icon tints correctly in light
+        // and dark menu bars and renders crisply at every scale.
+        statusItem.button?.image = NSImage(
+            systemSymbolName: "calendar",
+            accessibilityDescription: "Quick Date"
+        )
 
         NotificationCenter.default.addObserver(
             self,
