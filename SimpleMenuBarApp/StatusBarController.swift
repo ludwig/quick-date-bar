@@ -50,6 +50,22 @@ struct CopyEntry {
             keyEquivalent: "f"
         ),
     ]
+
+    /// User-defined patterns from the `customFormats` default: an array of
+    /// dictionaries with `format` (DateFormatter pattern), optional `title`,
+    /// and optional single-character `key`. Example:
+    ///
+    ///     defaults write com.SixtyThreeBooks.SimpleMenuBarApp customFormats \
+    ///         -array-add '{ title = "Copy month"; format = "yyyy-MM"; key = "m"; }'
+    static func custom(from defaults: UserDefaults = .standard) -> [CopyEntry] {
+        let raw = defaults.array(forKey: "customFormats") as? [[String: Any]] ?? []
+        return raw.compactMap { dict in
+            guard let format = dict["format"] as? String, !format.isEmpty else { return nil }
+            let title = dict["title"] as? String ?? "Copy \(format)"
+            let key = dict["key"] as? String ?? ""
+            return pattern(title, format, key: String(key.prefix(1)))
+        }
+    }
 }
 
 class StatusBarController: NSObject, NSMenuDelegate {
@@ -112,8 +128,14 @@ class StatusBarController: NSObject, NSMenuDelegate {
         menu.addItem(restoreItem)
         menu.addItem(.separator())
 
-        entries = CopyEntry.builtIn
+        // Re-read defaults on every open so `defaults write` takes effect
+        // without relaunching.
+        let custom = CopyEntry.custom()
+        entries = CopyEntry.builtIn + custom
         for (index, entry) in entries.enumerated() {
+            if index == CopyEntry.builtIn.count {
+                menu.addItem(.separator())
+            }
             let item = NSMenuItem(
                 title: entry.title(now),
                 action: #selector(copyEntry(_:)),
