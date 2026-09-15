@@ -49,6 +49,11 @@ struct CopyEntry {
             render: { DateFormats.hugoFrontMatter(from: $0) },
             keyEquivalent: "f"
         ),
+        CopyEntry(
+            title: { _ in "Copy new UUID" },
+            render: { _ in UUID().uuidString.lowercased() },
+            keyEquivalent: "u"
+        ),
     ]
 
     /// User-defined patterns from the `customFormats` default: an array of
