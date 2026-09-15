@@ -89,13 +89,7 @@ class StatusBarController: NSObject, NSMenuDelegate {
         menu.delegate = self
         menu.autoenablesItems = false
         statusItem.menu = menu
-        // SF Symbols are template images, so the icon tints correctly in light
-        // and dark menu bars and renders crisply at every scale.
-        if let image = NSImage(systemSymbolName: "calendar", accessibilityDescription: "Quick Date") {
-            statusItem.button?.image = image
-        } else {
-            statusItem.button?.title = "Date"
-        }
+        statusItem.button?.image = Self.menuBarIcon()
 
         NotificationCenter.default.addObserver(
             self,
@@ -114,6 +108,45 @@ class StatusBarController: NSObject, NSMenuDelegate {
         if dateHotKey == nil {
             NSLog("Could not register the ⌃⌥⌘D global hotkey")
         }
+    }
+
+    // MARK: - Icon
+
+    /// A solid calendar with a star cut out. As a template image the menu bar
+    /// tints it dark or light to match its appearance, and the cutouts show
+    /// the bar through, so it reads heavier than the outline SF Symbol.
+    private static func menuBarIcon() -> NSImage {
+        let image = NSImage(size: NSSize(width: 18, height: 18), flipped: false) { _ in
+            guard let context = NSGraphicsContext.current else { return false }
+            NSColor.black.setFill()
+            NSBezierPath(roundedRect: NSRect(x: 1.5, y: 1, width: 15, height: 13.5), xRadius: 3, yRadius: 3).fill()
+
+            context.compositingOperation = .clear
+            // Gaps around the binder rings, the header line, and the star.
+            for x: CGFloat in [4, 11] {
+                NSBezierPath(roundedRect: NSRect(x: x, y: 12, width: 3, height: 6), xRadius: 1.5, yRadius: 1.5).fill()
+            }
+            NSRect(x: 1.5, y: 10, width: 15, height: 1).fill(using: .clear)
+            let star = NSBezierPath()
+            let center = NSPoint(x: 9, y: 5.6)
+            for i in 0..<10 {
+                let radius: CGFloat = i.isMultiple(of: 2) ? 3.6 : 1.5
+                let angle = CGFloat.pi / 2 + CGFloat(i) * .pi / 5
+                let point = NSPoint(x: center.x + radius * cos(angle), y: center.y + radius * sin(angle))
+                if i == 0 { star.move(to: point) } else { star.line(to: point) }
+            }
+            star.close()
+            star.fill()
+
+            context.compositingOperation = .sourceOver
+            for x: CGFloat in [4.75, 11.75] {
+                NSBezierPath(roundedRect: NSRect(x: x, y: 12.5, width: 1.5, height: 5), xRadius: 0.75, yRadius: 0.75).fill()
+            }
+            return true
+        }
+        image.isTemplate = true
+        image.accessibilityDescription = "Quick Date"
+        return image
     }
 
     // MARK: - Menu
