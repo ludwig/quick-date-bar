@@ -15,6 +15,7 @@ contents back if I copied by mistake.
 | Copy current week | `2026-W37` (ISO 8601 week) | `w` |
 | Copy Evernote journal prefix | `2026-09-10: Thursday... ` | `e` |
 | Copy Hugo front matter template | YAML block with the ISO timestamp | `f` |
+| Copy new UUID | `3f2b8c1e-9a4d-4e7b-8f10-6c2d5a9e0b41` (random, lowercase) | `u` |
 | Launch at Login | toggles login item registration | |
 | Quit | | `q` |
 
